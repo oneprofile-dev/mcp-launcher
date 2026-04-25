@@ -33,5 +33,5 @@ export async function searchServers({
     throw new Error(`Search failed: ${res.status} ${res.statusText}`);
   }
 
-  return await res.json();
+  return (await res.json()) as SearchResult[];
 }

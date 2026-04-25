@@ -26,17 +26,17 @@ export async function getServerDetails(slug: string): Promise<ServerDetails> {
     throw new Error(`Failed to fetch details: ${res.status} ${res.statusText}`);
   }
 
-  const data = await res.json();
+  const data = (await res.json()) as Record<string, unknown>;
   return {
-    slug: data.slug,
-    name: data.name,
-    tagline: data.tagline,
-    description: data.description,
-    category: data.category,
-    pricingType: data.pricingType,
-    rating: data.rating,
-    downloadCount: data.downloadCount,
-    repo: data.repository,
-    docsUrl: data.documentationUrl,
+    slug: data.slug as string,
+    name: data.name as string,
+    tagline: data.tagline as string,
+    description: data.description as string,
+    category: data.category as string,
+    pricingType: data.pricingType as string,
+    rating: data.rating as number | null,
+    downloadCount: data.downloadCount as number,
+    repo: data.repository as string | undefined,
+    docsUrl: data.documentationUrl as string | undefined,
   };
 }

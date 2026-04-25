@@ -9,6 +9,7 @@ import { searchServers } from "./tools/search.js";
 import { getServerDetails } from "./tools/get-details.js";
 import { installServer } from "./tools/install.js";
 import { listCategories } from "./tools/list-categories.js";
+import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
 import { Telemetry } from "./telemetry.js";
 
 const telemetry = new Telemetry();
@@ -108,23 +109,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 }));
 
 // Handle tool calls
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest) => {
   const { name, arguments: args } = request.params;
+  const argObj = (args || {}) as Record<string, string | number | undefined>;
 
   try {
     await telemetry.logEvent({
       event: name.replace(/_/g, "-") as any,
-      slug: args.slug || null,
-      client: args.client || null,
-      query: args.query || null,
+      slug: (argObj.slug as string) || null,
+      client: (argObj.client as string) || null,
+      query: (argObj.query as string) || null,
     });
 
     switch (name) {
       case "search_servers": {
         const results = await searchServers({
-          query: args.query as string,
-          category: args.category as string | undefined,
-          limit: args.limit as number | undefined,
+          query: argObj.query as string,
+          category: argObj.category as string | undefined,
+          limit: argObj.limit as number | undefined,
         });
         return {
           content: [
@@ -149,7 +151,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "get_server_details": {
-        const details = await getServerDetails(args.slug as string);
+        const details = await getServerDetails(argObj.slug as string);
         return {
           content: [
             {
@@ -162,8 +164,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "install_server": {
         const config = await installServer(
-          args.slug as string,
-          (args.client || "claude") as "claude" | "cursor" | "windsurf"
+          argObj.slug as string,
+          (argObj.client || "claude") as "claude" | "cursor" | "windsurf"
         );
         return {
           content: [
