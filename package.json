@@ -4,9 +4,7 @@
   "description": "Find and install MCP servers from inside Claude, Cursor, or Windsurf",
   "license": "MIT",
   "type": "module",
-  "bin": {
-    "@curatedmcp/launcher": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "main": "./dist/index.js",
   "exports": {
     ".": {
