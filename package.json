@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "curatedmcp-launcher": "./dist/index.js"
+    "@curatedmcp/launcher": "dist/index.js"
   },
   "main": "./dist/index.js",
   "exports": {
@@ -35,7 +35,7 @@
     "url": "https://github.com/curatedmcp/launcher"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
     "@types/node": "^20",

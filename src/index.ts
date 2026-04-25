@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
-import { searchServers } from "./tools/search.js";
-import { getServerDetails } from "./tools/get-details.js";
-import { installServer } from "./tools/install.js";
-import { listCategories } from "./tools/list-categories.js";
-import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
-import { Telemetry } from "./telemetry.js";
+} from "@modelcontextprotocol/sdk/types";
+import { searchServers } from "./tools/search";
+import { getServerDetails } from "./tools/get-details";
+import { installServer } from "./tools/install";
+import { listCategories } from "./tools/list-categories";
+import type { CallToolRequest } from "@modelcontextprotocol/sdk/types";
+import { Telemetry } from "./telemetry";
 
 const telemetry = new Telemetry();
 
