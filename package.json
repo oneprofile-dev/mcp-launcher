@@ -1,6 +1,6 @@
 {
   "name": "@curatedmcp/launcher",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Find and install MCP servers from inside Claude, Cursor, or Windsurf",
   "license": "MIT",
   "type": "module",
@@ -20,14 +20,22 @@
   },
   "keywords": [
     "mcp",
+    "mcp-server",
+    "mcp-client",
+    "launcher",
+    "install",
     "model-context-protocol",
     "claude",
+    "claude-desktop",
     "cursor",
     "windsurf",
     "anthropic",
+    "ai-tools",
+    "ai-agent",
     "discovery"
   ],
   "author": "CuratedMCP",
+  "homepage": "https://curatedmcp.com/launcher",
   "repository": {
     "type": "git",
     "url": "https://github.com/curatedmcp/launcher"
