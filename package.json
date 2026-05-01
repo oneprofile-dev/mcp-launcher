@@ -4,7 +4,9 @@
   "description": "The MCP Hub — one config that connects every AI agent (Claude, Cursor, Windsurf, Copilot, Gemini) to every MCP server you register",
   "license": "MIT",
   "type": "module",
-  "bin": "dist/index.js",
+  "bin": {
+    "launcher": "./dist/index.js"
+  },
   "main": "./dist/index.js",
   "exports": {
     ".": {
