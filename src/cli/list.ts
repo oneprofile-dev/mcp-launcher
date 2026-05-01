@@ -26,5 +26,14 @@ export function listStack(): number {
   console.log(
     `Total: ${stack.entries.length} server(s). Tools appear in your AI client as \`<slug>__<tool>\`.`
   );
+
+  // One-line upsell — only when the user has 2+ servers, so it's relevant, not spam.
+  if (stack.entries.length >= 2) {
+    console.log("");
+    console.log(
+      `Tip: get continuous security audits for everything in your stack →`
+    );
+    console.log(`     https://curatedmcp.com/sentinel`);
+  }
   return 0;
 }
