@@ -26,7 +26,7 @@ export async function searchServers({
 
   const url = `${API_URL}/api/launcher/search?${params}`;
   const res = await fetch(url, {
-    headers: { "User-Agent": "@curatedmcp/launcher/0.1.0" },
+    headers: { "User-Agent": "@curatedmcp/launcher/1.0.0" },
   });
 
   if (!res.ok) {

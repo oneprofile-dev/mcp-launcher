@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
@@ -43,8 +43,11 @@ export class Telemetry {
       try {
         const config: TelemetryConfig = {
           anonId,
-          version: "0.1.0",
+          version: "1.0.0",
         };
+        if (!existsSync(CONFIG_DIR)) {
+          mkdirSync(CONFIG_DIR, { recursive: true });
+        }
         writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
       } catch (err) {
         // Silently fail if we can't write config
@@ -74,7 +77,7 @@ export class Telemetry {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "@curatedmcp/launcher/0.1.0",
+          "User-Agent": "@curatedmcp/launcher/1.0.0",
         },
         body: JSON.stringify(payload),
       }).catch(() => {
