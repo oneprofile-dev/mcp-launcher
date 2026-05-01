@@ -1,5 +1,12 @@
 src/
 tsconfig.json
-*.map
+vitest.config.ts
+*.tgz
 .gitignore
 node_modules/
+.github/
+dist/__tests__/
+dist/**/*.test.js
+dist/**/*.test.d.ts
+dist/**/*.test.d.ts.map
+dist/**/*.test.js.map

@@ -4,12 +4,16 @@
  * `npx @curatedmcp/launcher` (no args) → MCP server mode (handled in index.ts)
  * `npx @curatedmcp/launcher <subcommand>` → run that subcommand and exit
  */
+import { createRequire } from "module";
 import { addToStack, parseEnvFlags } from "./cli/add.js";
 import { removeFromStack } from "./cli/remove.js";
 import { listStack } from "./cli/list.js";
 import { runInit } from "./cli/init.js";
 
-const VERSION = "1.0.0";
+const require = createRequire(import.meta.url);
+// Read version from package.json so it never drifts from the published version.
+const VERSION: string =
+  (require("../package.json") as { version: string }).version;
 
 const HELP = `
 @curatedmcp/launcher v${VERSION}

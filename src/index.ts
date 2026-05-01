@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createRequire } from "module";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -16,7 +17,9 @@ import { Proxy } from "./proxy.js";
 import { readStack } from "./stack.js";
 import { addToStack } from "./cli/add.js";
 
-const VERSION = "1.0.0";
+const require = createRequire(import.meta.url);
+const VERSION: string =
+  (require("../package.json") as { version: string }).version;
 
 // ─── CLI dispatch ────────────────────────────────────────────────────────────
 // If invoked with subcommand args, run the CLI and exit.

@@ -43,7 +43,7 @@ export class Telemetry {
       try {
         const config: TelemetryConfig = {
           anonId,
-          version: "1.0.0",
+          version: "1.0.1",
         };
         if (!existsSync(CONFIG_DIR)) {
           mkdirSync(CONFIG_DIR, { recursive: true });
@@ -77,7 +77,7 @@ export class Telemetry {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "@curatedmcp/launcher/1.0.0",
+          "User-Agent": "@curatedmcp/launcher/1.0.1",
         },
         body: JSON.stringify(payload),
       }).catch(() => {
