@@ -45,7 +45,10 @@
   "homepage": "https://curatedmcp.com/launcher",
   "repository": {
     "type": "git",
-    "url": "https://github.com/curatedmcp/launcher"
+    "url": "https://github.com/oneprofile-dev/mcp-launcher"
+  },
+  "bugs": {
+    "url": "https://github.com/oneprofile-dev/mcp-launcher/issues"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0"

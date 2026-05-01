@@ -1,5 +1,11 @@
 # @curatedmcp/launcher
 
+[![npm version](https://img.shields.io/npm/v/@curatedmcp/launcher?color=brightgreen)](https://www.npmjs.com/package/@curatedmcp/launcher)
+[![npm downloads](https://img.shields.io/npm/dm/@curatedmcp/launcher)](https://www.npmjs.com/package/@curatedmcp/launcher)
+[![CI](https://github.com/oneprofile-dev/mcp-launcher/actions/workflows/test.yml/badge.svg)](https://github.com/oneprofile-dev/mcp-launcher/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js ≥18](https://img.shields.io/node/v/@curatedmcp/launcher)](https://nodejs.org)
+
 > **The MCP Hub.** One config that bridges every AI agent (Claude, Cursor, Windsurf, Copilot, Gemini) to every MCP server you register.
 
 ```bash
