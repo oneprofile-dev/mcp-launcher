@@ -21,7 +21,7 @@ export async function installServer(
   // Fetch server metadata
   const url = `${API_URL}/api/servers/${slug}`;
   const res = await fetch(url, {
-    headers: { "User-Agent": "@curatedmcp/launcher/1.0.0" },
+    headers: { "User-Agent": "curatedmcp/2.0.0" },
   });
 
   if (!res.ok) {

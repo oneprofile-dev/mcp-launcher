@@ -77,7 +77,7 @@ export class Telemetry {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "@curatedmcp/launcher/1.0.1",
+          "User-Agent": "curatedmcp/2.0.0",
         },
         body: JSON.stringify(payload),
       }).catch(() => {

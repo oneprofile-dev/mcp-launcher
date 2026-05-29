@@ -120,7 +120,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     case "add": {
       const slug = rest.find((a) => !a.startsWith("-"));
       if (!slug) {
-        console.error("Usage: launcher add <slug> [--env KEY=value ...]");
+        console.error("Usage: curatedmcp add <slug> [--env KEY=value ...]");
         return 1;
       }
       const env = parseEnvFlags(rest);
@@ -132,7 +132,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     case "remove": {
       const slug = rest.find((a) => !a.startsWith("-"));
       if (!slug) {
-        console.error("Usage: launcher remove <slug>");
+        console.error("Usage: curatedmcp remove <slug>");
         return 1;
       }
       return removeFromStack(slug);

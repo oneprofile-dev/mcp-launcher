@@ -1,6 +1,6 @@
 {
   "name": "curatedmcp",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The CuratedMCP agent — discover, run, audit, and govern every MCP server your AI tools (Claude, Cursor, Windsurf, Copilot, Gemini) use",
   "license": "MIT",
   "type": "module",

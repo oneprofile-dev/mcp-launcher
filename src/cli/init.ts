@@ -11,7 +11,7 @@ const CONFIG_SNIPPET = JSON.stringify(
     mcpServers: {
       curatedmcp: {
         command: "npx",
-        args: ["-y", "@curatedmcp/launcher"],
+        args: ["-y", "curatedmcp"],
       },
     },
   },
@@ -20,7 +20,7 @@ const CONFIG_SNIPPET = JSON.stringify(
 );
 
 const INSTRUCTIONS = `
-@curatedmcp/launcher — The MCP Hub
+curatedmcp — The CuratedMCP Agent
 Add this entry to your AI client's MCP config:
 
 ${CONFIG_SNIPPET}
@@ -33,9 +33,9 @@ Config locations:
   Claude Code     ~/.claude/mcp.json (or .claude/mcp.json in your project)
 
 Then add servers to your stack:
-  launcher add github           # interactive — prompts for GITHUB_TOKEN
-  launcher add postgres         # adds the Postgres server
-  launcher list                 # see your stack
+  curatedmcp add github           # interactive — prompts for GITHUB_TOKEN
+  curatedmcp add postgres         # adds the Postgres server
+  curatedmcp list                 # see your stack
 
 Servers in your stack live at:
   ${stackPath()}

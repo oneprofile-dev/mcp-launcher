@@ -122,7 +122,7 @@ export function parseEnvFlags(args: string[]): Record<string, string> {
 async function fetchStackConfig(slug: string): Promise<StackConfigResponse> {
   const url = `${API_URL}/api/launcher/stack-config?slug=${encodeURIComponent(slug)}`;
   const res = await fetch(url, {
-    headers: { "User-Agent": "@curatedmcp/launcher/1.0.0" },
+    headers: { "User-Agent": "curatedmcp/2.0.0" },
   });
   if (res.status === 404) {
     throw new Error(

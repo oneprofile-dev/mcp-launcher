@@ -8,7 +8,7 @@ export function removeFromStack(slug: string): number {
   const removed = removeEntry(slug);
   if (!removed) {
     console.error(
-      `"${slug}" is not in your stack. Run \`launcher list\` to see what is.`
+      `"${slug}" is not in your stack. Run \`curatedmcp list\` to see what is.`
     );
     return 1;
   }

@@ -144,7 +144,7 @@ export class Proxy {
     const state = this.children.get(slug);
     if (!state) {
       throw new Error(
-        `Server "${slug}" is not in your stack. Run \`launcher list\` to see what's loaded.`
+        `Server "${slug}" is not in your stack. Run \`curatedmcp list\` to see what's loaded.`
       );
     }
     if (state.error) {

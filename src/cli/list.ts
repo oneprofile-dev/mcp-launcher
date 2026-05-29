@@ -7,7 +7,7 @@ export function listStack(): number {
   const stack = readStack();
   if (stack.entries.length === 0) {
     console.log("Your stack is empty.");
-    console.log(`Add a server with \`launcher add <slug>\`.`);
+    console.log(`Add a server with \`curatedmcp add <slug>\`.`);
     console.log(`Browse https://curatedmcp.com/marketplace to find one.`);
     return 0;
   }
@@ -31,9 +31,8 @@ export function listStack(): number {
   if (stack.entries.length >= 2) {
     console.log("");
     console.log(
-      `Tip: get continuous security audits for everything in your stack →`
+      `Tip: run \`curatedmcp audit\` to security-scan everything in your stack.`
     );
-    console.log(`     https://curatedmcp.com/sentinel`);
   }
   return 0;
 }
