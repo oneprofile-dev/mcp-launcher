@@ -9,6 +9,10 @@ import { addToStack, parseEnvFlags } from "./cli/add.js";
 import { removeFromStack } from "./cli/remove.js";
 import { listStack } from "./cli/list.js";
 import { runInit } from "./cli/init.js";
+import { runAuditCommand } from "./cli/audit.js";
+import { runGuardCommand } from "./cli/guard.js";
+import { runLogin } from "./cli/login.js";
+import { runSync } from "./cli/sync.js";
 
 const require = createRequire(import.meta.url);
 // Read version from package.json so it never drifts from the published version.
@@ -16,30 +20,36 @@ const VERSION: string =
   (require("../package.json") as { version: string }).version;
 
 const HELP = `
-@curatedmcp/launcher v${VERSION}
-The MCP Hub — one config that bridges every AI agent to every MCP server.
+curatedmcp v${VERSION}
+The CuratedMCP agent — discover, run, audit, and govern every MCP server your AI tools use.
 
 USAGE
-  npx @curatedmcp/launcher [SUBCOMMAND] [OPTIONS]
+  npx curatedmcp [SUBCOMMAND] [OPTIONS]
 
 SUBCOMMANDS
-  (no subcommand)        Run as an MCP server over stdio (used by AI clients).
+  (no subcommand)        Run as an MCP hub server over stdio (used by AI clients).
+  audit                  Scan this machine for MCP servers and flag security risks.
   add <slug>             Add a server from the CuratedMCP catalog to your stack.
   remove <slug>          Remove a server from your stack.
   list                   List the servers currently in your stack.
-  init                   Show the one-line config snippet to add Launcher to your AI client.
+  guard -- <cmd>         Run the action firewall in front of a downstream MCP server.
+  login [token]          Sign in to your CuratedMCP account (enables sync & alerts).
+  sync [--team <slug>]   Pull your team's MCP allow-list and report a local audit.
+  init                   Show the one-line config snippet to add the agent to your AI client.
   --version, -v          Print version and exit.
   --help, -h             Print this help.
 
 EXAMPLES
-  npx @curatedmcp/launcher init
-  npx @curatedmcp/launcher add github --env GITHUB_TOKEN=ghp_xxx
-  npx @curatedmcp/launcher list
-  npx @curatedmcp/launcher remove github
+  npx curatedmcp audit
+  npx curatedmcp add github --env GITHUB_TOKEN=ghp_xxx
+  npx curatedmcp guard -- npx -y @modelcontextprotocol/server-filesystem /tmp
+  npx curatedmcp login
+  npx curatedmcp sync
 
 CONFIG
   Stack lives at ~/.curatedmcp/stack.json (hand-editable JSON).
-  Set CURATOR_API_URL to override the catalog endpoint (default: https://www.curatedmcp.com).
+  Auth token at ~/.curatedmcp/auth.json. Set CURATOR_API_URL to override the API base
+  (default: https://www.curatedmcp.com).
 
 LEARN MORE
   https://curatedmcp.com/launcher
@@ -57,19 +67,21 @@ export function isCliInvocation(argv: readonly string[]): boolean {
   if (args.length === 0) return false;
   // First non-flag arg is the subcommand
   const first = args[0];
-  if (
-    first === "add" ||
-    first === "remove" ||
-    first === "list" ||
-    first === "init" ||
-    first === "--help" ||
-    first === "-h" ||
-    first === "--version" ||
-    first === "-v"
-  ) {
-    return true;
-  }
-  return false;
+  const SUBCOMMANDS = new Set([
+    "add",
+    "remove",
+    "list",
+    "init",
+    "audit",
+    "guard",
+    "login",
+    "sync",
+    "--help",
+    "-h",
+    "--version",
+    "-v",
+  ]);
+  return SUBCOMMANDS.has(first);
 }
 
 export async function runCli(argv: readonly string[]): Promise<number> {
@@ -89,6 +101,18 @@ export async function runCli(argv: readonly string[]): Promise<number> {
 
     case "init":
       return runInit();
+
+    case "audit":
+      return runAuditCommand(rest);
+
+    case "guard":
+      return runGuardCommand(rest);
+
+    case "login":
+      return runLogin(rest);
+
+    case "sync":
+      return runSync(rest);
 
     case "list":
       return listStack();

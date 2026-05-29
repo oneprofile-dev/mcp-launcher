@@ -1,10 +1,11 @@
 {
-  "name": "@curatedmcp/launcher",
-  "version": "1.0.3",
-  "description": "The MCP Hub — one config that connects every AI agent (Claude, Cursor, Windsurf, Copilot, Gemini) to every MCP server you register",
+  "name": "curatedmcp",
+  "version": "2.0.0",
+  "description": "The CuratedMCP agent — discover, run, audit, and govern every MCP server your AI tools (Claude, Cursor, Windsurf, Copilot, Gemini) use",
   "license": "MIT",
   "type": "module",
   "bin": {
+    "curatedmcp": "./dist/index.js",
     "launcher": "./dist/index.js"
   },
   "main": "./dist/index.js",
@@ -16,6 +17,7 @@
   },
   "files": [
     "dist/**/*.js",
+    "dist/**/*.json",
     "dist/**/*.d.ts",
     "dist/**/*.d.ts.map",
     "!dist/__tests__/",
@@ -24,7 +26,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp src/guard/default-policy.json dist/guard/default-policy.json",
     "dev": "node --loader ts-node/esm src/index.ts",
     "test": "vitest run",
     "prepublishOnly": "npm run build"
@@ -62,9 +64,13 @@
     "url": "https://github.com/oneprofile-dev/mcp-launcher/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0"
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "chalk": "^5.3.0",
+    "express": "^4.18.0",
+    "minimatch": "^9.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.0",
     "@types/node": "^20",
     "typescript": "^5",
     "vitest": "^1.0.0"

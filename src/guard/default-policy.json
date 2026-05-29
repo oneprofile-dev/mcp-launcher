@@ -1,0 +1,33 @@
+[
+  {
+    "id": "default-block-shell",
+    "name": "Block Shell Execution",
+    "serverName": "*",
+    "toolName": "*",
+    "action": "BLOCK",
+    "severity": "CRITICAL",
+    "enabled": true,
+    "createdAt": 1712428800000
+  },
+  {
+    "id": "default-block-rm",
+    "name": "Block File Deletion",
+    "serverName": "*",
+    "toolName": "*rm*",
+    "action": "BLOCK",
+    "severity": "CRITICAL",
+    "enabled": true,
+    "createdAt": 1712428800000
+  },
+  {
+    "id": "default-block-secrets",
+    "name": "Block Secret Access",
+    "serverName": "*",
+    "toolName": "*",
+    "argumentContains": ["SECRET", "PASSWORD", "TOKEN"],
+    "action": "REQUIRE_APPROVAL",
+    "severity": "CRITICAL",
+    "enabled": true,
+    "createdAt": 1712428800000
+  }
+]
