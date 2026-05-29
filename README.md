@@ -1,62 +1,84 @@
-# @curatedmcp/launcher
+# curatedmcp
 
-[![npm version](https://img.shields.io/npm/v/@curatedmcp/launcher?color=brightgreen)](https://www.npmjs.com/package/@curatedmcp/launcher)
-[![npm downloads](https://img.shields.io/npm/dm/@curatedmcp/launcher)](https://www.npmjs.com/package/@curatedmcp/launcher)
-[![CI](https://github.com/oneprofile-dev/mcp-launcher/actions/workflows/test.yml/badge.svg)](https://github.com/oneprofile-dev/mcp-launcher/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/curatedmcp?color=brightgreen)](https://www.npmjs.com/package/curatedmcp)
+[![npm downloads](https://img.shields.io/npm/dm/curatedmcp)](https://www.npmjs.com/package/curatedmcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js ≥18](https://img.shields.io/node/v/@curatedmcp/launcher)](https://nodejs.org)
+[![Node.js ≥18](https://img.shields.io/node/v/curatedmcp)](https://nodejs.org)
 
-> **The MCP Hub.** One config that bridges every AI agent (Claude, Cursor, Windsurf, Copilot, Gemini) to every MCP server you register.
+> **The CuratedMCP Agent.** One CLI to **discover, run, audit, and govern** every MCP server your AI tools (Claude, Cursor, Windsurf, Copilot, Gemini) use.
 
 ```bash
-npx @curatedmcp/launcher init
+# 10-second risk scan of your machine — no signup
+npx curatedmcp audit
 ```
 
-**Plug it in once. Add servers anytime. Use them in any AI agent.**
+**Plug it in once. Add servers anytime. Audit and govern them from one place.**
 
 ---
 
-## Why
+## What you get
 
-If you use MCP servers across multiple AI clients, you've felt this pain:
+| Command | What it does |
+| --- | --- |
+| `curatedmcp audit` | Scan your MCP configs for risky servers (high/medium/low). Zero auth, instant value. |
+| `curatedmcp` *(no args)* | Run as an MCP hub server over stdio for Claude, Cursor, Windsurf, etc. |
+| `curatedmcp add <slug>` | Add a server from the CuratedMCP catalog to your stack. |
+| `curatedmcp remove <slug>` | Remove a server from your stack. |
+| `curatedmcp list` | Show your current stack. |
+| `curatedmcp init` | Print the config snippet to drop into your AI client. |
+| `curatedmcp guard -- <cmd>` | Run a server behind the local action firewall. |
+| `curatedmcp login` | Authenticate the agent to your CuratedMCP account. |
+| `curatedmcp sync` | Pull your team's registry config and push audit results. |
 
-- You configure GitHub MCP in Claude Desktop. Then you switch to Cursor and have to do it again.
-- You add five servers to Claude. Want them in Windsurf too? Edit a different config file.
-- A new AI agent ships? Re-paste every server config from scratch.
+---
 
-**Launcher fixes that.** It's one MCP entry that fans out to every server you've added, in every AI client.
+## 1. Audit (the wedge — start here)
+
+```bash
+npx curatedmcp audit
+```
+
+Scans every MCP config file on your machine (Claude Desktop, Cursor, Windsurf, Claude Code, …),
+classifies each server against the CuratedMCP catalog, and flags:
+
+- 🔴 **HIGH** — unverified or known-risky servers with credentials
+- 🟡 **MEDIUM** — verified servers running outside catalog defaults
+- 🟢 **VERIFIED** — known-good catalog servers
+
+No signup, no cloud, no data leaves your machine. Logged in? Add `--sync` to push the result to your dashboard.
+
+---
+
+## 2. Run as the MCP Hub
+
+If you use MCP servers across multiple AI clients, you've felt this pain: configure GitHub MCP in
+Claude Desktop, then re-do it in Cursor, then in Windsurf. New agent ships? Re-paste every config.
+
+The agent fixes that. It's one MCP entry that fans out to every server you've added, in every AI client.
 
 ```
    Claude   Cursor   Windsurf   Copilot   Gemini
        \      \      |      /      /
         ┌──────────────────────────┐
-        │  @curatedmcp/launcher    │   ← one config in each agent
-        │  (the MCP hub)           │
+        │       curatedmcp         │   ← one config in each agent
+        │     (the MCP hub)        │
         └────┬──────┬──────┬───────┘
              │      │      │
-          GitHub  Postgres  Stripe   ← `launcher add`'d once, available everywhere
+          GitHub  Postgres  Stripe   ← `add`'d once, available everywhere
 ```
 
----
-
-## Install (60 seconds)
-
-### 1. Add Launcher to your AI client
-
-Drop this entry into your MCP config:
+### Add it to your AI client
 
 ```json
 {
   "mcpServers": {
     "curatedmcp": {
       "command": "npx",
-      "args": ["-y", "@curatedmcp/launcher"]
+      "args": ["-y", "curatedmcp"]
     }
   }
 }
 ```
-
-Config file location:
 
 | Client          | Path                                                                  |
 | --------------- | --------------------------------------------------------------------- |
@@ -65,17 +87,15 @@ Config file location:
 | Windsurf        | `~/.codeium/windsurf/mcp_config.json`                                 |
 | Claude Code     | `~/.claude/mcp.json` (or `.claude/mcp.json` per-project)              |
 
-### 2. Add servers to your stack
+### Add servers to your stack
 
 ```bash
-npx @curatedmcp/launcher add github
-# Prompts for GITHUB_TOKEN
-
-npx @curatedmcp/launcher add postgres --env DATABASE_URL=postgres://...
-npx @curatedmcp/launcher list
+npx curatedmcp add github          # prompts for GITHUB_TOKEN
+npx curatedmcp add postgres --env DATABASE_URL=postgres://...
+npx curatedmcp list
 ```
 
-### 3. Restart your AI client
+### Restart your AI client
 
 Tools appear with a `<slug>__` prefix:
 
@@ -83,39 +103,42 @@ Tools appear with a `<slug>__` prefix:
 - `postgres__query`
 - `filesystem__read_file`
 
-That's it. Add more servers any time — just `add` and restart.
-
 ---
 
-## CLI Reference
+## 3. Guard (local action firewall)
 
-```
-launcher                      # Run as MCP server (used by AI clients)
-launcher init                 # Print the config snippet for your AI client
-launcher add <slug>           # Add a server from the CuratedMCP catalog
-  --env KEY=value             # Pre-supply env vars (otherwise prompted)
-launcher remove <slug>        # Remove a server from your stack
-launcher list                 # Show your stack
-launcher --version            # Print version
-launcher --help               # Print help
+```bash
+npx curatedmcp guard -- npx -y @modelcontextprotocol/server-github
 ```
 
----
+Wraps an MCP server with a local policy engine that gates every `tools/call` against
+`~/.curatedmcp/guard-policy.json`. Default policy allows read, prompts on write, blocks destructive.
 
-## How it works
-
-1. Your AI client launches `npx @curatedmcp/launcher` over stdio (one MCP entry, like any other).
-2. Launcher reads `~/.curatedmcp/stack.json` and **spawns each registered server as a child process** over stdio.
-3. On `tools/list`, Launcher **aggregates** every child's tools and returns them prefixed with the server's slug.
-4. On `tools/call`, Launcher **routes** the request to the matching child by name prefix and forwards the response unchanged.
-
-This makes Launcher invisible to the agent — it sees one MCP server with all the tools — while behind the scenes you've got N independent processes, isolated, each with its own credentials.
+```bash
+npx curatedmcp guard --dashboard --port 7878 -- npx -y @some/server
+# Then open http://localhost:7878 for the live action log
+```
 
 ---
 
-## Config file
+## 4. Login + sync (for teams)
 
-`~/.curatedmcp/stack.json` — plain JSON, hand-editable, version-controllable:
+Once you have a CuratedMCP account, link the CLI to it:
+
+```bash
+npx curatedmcp login                  # paste a registry key from your dashboard
+npx curatedmcp sync                   # pull team registry config + push audit results
+npx curatedmcp sync --team acme-eng   # pick a specific team if you're in more than one
+```
+
+Sync pulls the locked-down server list approved by your team and merges it into your local stack —
+so every developer's machine runs the same vetted set of servers.
+
+---
+
+## Config files
+
+`~/.curatedmcp/stack.json` — your stack, plain JSON, hand-editable, version-controllable:
 
 ```json
 {
@@ -135,11 +158,17 @@ This makes Launcher invisible to the agent — it sees one MCP server with all t
 
 Set `"disabled": true` on an entry to skip it without removing it.
 
+Other files (created on first use):
+
+- `~/.curatedmcp/auth.json` — login token (mode 0600)
+- `~/.curatedmcp/guard-policy.json` — firewall policy
+- `~/.curatedmcp/launcher.json` — anonymous client UUID
+
 ---
 
 ## In-agent discovery
 
-Launcher itself exposes 5 discovery tools to your AI client, so you can ask the agent:
+The agent itself exposes discovery tools to your AI client, so you can ask:
 
 > "Find me an MCP server for Postgres."
 > "What's the best Stripe MCP?"
@@ -151,9 +180,9 @@ The agent uses `search_servers`, `get_server_details`, and `add_to_stack` to do 
 
 ## Privacy
 
-- **All config is local** at `~/.curatedmcp/stack.json`. No cloud sync, no account.
+- **All config is local** at `~/.curatedmcp/`. No cloud sync unless you `login`.
 - **Anonymous telemetry only** (event names like "search", "add"). Disable with `--no-telemetry` or `CURATOR_TELEMETRY=false`.
-- A persistent UUID is stored at `~/.curatedmcp/launcher.json` for de-duplication.
+- Audit results stay on your machine unless you `login` and run `--sync`.
 
 ---
 
@@ -161,7 +190,20 @@ The agent uses `search_servers`, `get_server_details`, and `add_to_stack` to do 
 
 - Works with Claude Desktop, Claude Code, Cursor, Windsurf, Copilot, Gemini, OpenAI Agents — anything that supports MCP over stdio.
 - Node.js ≥ 18.
-- Single dependency: `@modelcontextprotocol/sdk`.
+
+---
+
+## Migrating from the old packages
+
+The agent replaces three earlier packages, which are now deprecated:
+
+| Old | New |
+| --- | --- |
+| `@curatedmcp/launcher` | `curatedmcp` *(no args)* / `curatedmcp add` / `curatedmcp list` |
+| `@curatedmcp/auditor` *(aka `mcp-audit`)* | `curatedmcp audit` |
+| `@curatedmcp/sentinel` *(aka `sentinel`)* | `curatedmcp guard` |
+
+A `launcher` bin alias is kept for back-compat.
 
 ---
 
@@ -169,7 +211,7 @@ The agent uses `search_servers`, `get_server_details`, and `add_to_stack` to do 
 
 - 🌐 [curatedmcp.com/launcher](https://curatedmcp.com/launcher)
 - 📚 [Marketplace](https://curatedmcp.com/marketplace)
-- 🐙 [GitHub](https://github.com/curatedmcp/launcher)
-- 💬 [Issues](https://github.com/curatedmcp/launcher/issues)
+- 🐙 [GitHub](https://github.com/oneprofile-dev/mcp-launcher)
+- 💬 [Issues](https://github.com/oneprofile-dev/mcp-launcher/issues)
 
 MIT licensed.
