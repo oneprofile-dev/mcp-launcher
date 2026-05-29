@@ -10,10 +10,16 @@ interface TeamConfig {
   _meta?: { team?: string; serverCount?: number };
 }
 
-async function fetchTeamConfig(slug: string): Promise<TeamConfig | null> {
+async function fetchTeamConfig(
+  slug: string,
+  token: string
+): Promise<TeamConfig | null> {
   try {
     const res = await fetch(`${API_URL}/api/teams/${slug}/config`, {
-      headers: { "User-Agent": "@curatedmcp/cli" },
+      headers: {
+        "User-Agent": "@curatedmcp/cli",
+        Authorization: `Bearer ${token}`,
+      },
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) return null;
@@ -89,7 +95,7 @@ export async function runSync(args: string[]): Promise<number> {
     return 1;
   }
 
-  const config = await fetchTeamConfig(slug);
+  const config = await fetchTeamConfig(slug, token);
   if (!config) {
     console.error(`Could not fetch config for team "${slug}".`);
     return 1;

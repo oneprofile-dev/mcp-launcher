@@ -13,6 +13,9 @@ import { runAuditCommand } from "./cli/audit.js";
 import { runGuardCommand } from "./cli/guard.js";
 import { runLogin } from "./cli/login.js";
 import { runSync } from "./cli/sync.js";
+import { runFeedback } from "./cli/feedback.js";
+import { track, type FunnelEvent } from "./telemetry.js";
+import { maybeNudge } from "./nudge.js";
 
 const require = createRequire(import.meta.url);
 // Read version from package.json so it never drifts from the published version.
@@ -35,6 +38,7 @@ SUBCOMMANDS
   guard -- <cmd>         Run the action firewall in front of a downstream MCP server.
   login [token]          Sign in to your CuratedMCP account (enables sync & alerts).
   sync [--team <slug>]   Pull your team's MCP allow-list and report a local audit.
+  feedback [message]     Send feedback to the CuratedMCP team.
   init                   Show the one-line config snippet to add the agent to your AI client.
   --version, -v          Print version and exit.
   --help, -h             Print this help.
@@ -76,6 +80,7 @@ export function isCliInvocation(argv: readonly string[]): boolean {
     "guard",
     "login",
     "sync",
+    "feedback",
     "--help",
     "-h",
     "--version",
@@ -84,10 +89,45 @@ export function isCliInvocation(argv: readonly string[]): boolean {
   return SUBCOMMANDS.has(first);
 }
 
+/** Map a subcommand to its activation funnel event, if it has one. */
+function funnelEventFor(cmd: string): { event: FunnelEvent; metadata?: Record<string, unknown> } | null {
+  switch (cmd) {
+    case "audit":
+      return { event: "audit_run" };
+    case "login":
+      return { event: "login" };
+    case "sync":
+      return { event: "sync" };
+    case "add":
+    case "remove":
+    case "list":
+    case "init":
+    case "guard":
+      return { event: "command_run", metadata: { command: cmd } };
+    default:
+      return null; // version/help/feedback/unknown handled elsewhere
+  }
+}
+
 export async function runCli(argv: readonly string[]): Promise<number> {
   const args = argv.slice(2);
   const [cmd, ...rest] = args;
 
+  // Fire the activation funnel event up-front (fire-and-forget) so we still
+  // capture intent even if the command itself later errors.
+  const funnel = funnelEventFor(cmd);
+  if (funnel) void track(funnel.event, funnel.metadata);
+
+  const code = await dispatch(cmd, rest);
+
+  // Post-command upgrade prompt / feedback hint — only for real subcommands,
+  // never for version/help/unknown. Fully non-blocking.
+  if (funnel || cmd === "feedback") await maybeNudge(VERSION);
+
+  return code;
+}
+
+async function dispatch(cmd: string, rest: string[]): Promise<number> {
   switch (cmd) {
     case "--version":
     case "-v":
@@ -113,6 +153,9 @@ export async function runCli(argv: readonly string[]): Promise<number> {
 
     case "sync":
       return runSync(rest);
+
+    case "feedback":
+      return runFeedback(rest);
 
     case "list":
       return listStack();
