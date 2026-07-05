@@ -1,6 +1,7 @@
 {
   "name": "curatedmcp",
-  "version": "2.1.0",
+  "version": "2.1.1",
+  "mcpName": "io.github.oneprofile-dev/mcp-launcher",
   "description": "The CuratedMCP agent — discover, run, audit, and govern every MCP server your AI tools (Claude, Cursor, Windsurf, Copilot, Gemini) use",
   "license": "MIT",
   "type": "module",

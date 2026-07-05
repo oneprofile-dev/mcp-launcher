@@ -1,0 +1,29 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.oneprofile-dev/mcp-launcher",
+  "description": "Single MCP hub: discover, add, audit, and govern MCP servers across every AI client.",
+  "repository": {
+    "url": "https://github.com/oneprofile-dev/mcp-launcher",
+    "source": "github"
+  },
+  "version": "2.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "curatedmcp",
+      "version": "2.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Override the CuratedMCP API base URL (defaults to https://www.curatedmcp.com). Only needed for local development against a different deployment.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false,
+          "name": "CURATOR_API_URL"
+        }
+      ]
+    }
+  ]
+}
